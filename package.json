@@ -2,11 +2,13 @@
   "dependencies": {
     "cheerio": "^1.0.0-rc.2",
     "express": "^4.16.4",
+    "jest": "^23.6.0",
     "nodemon": "^1.18.6",
     "request": "^2.88.0",
     "request-promise": "^4.2.2"
   },
   "scripts": {
-    "start": "nodemon src/index.js"
+    "start": "nodemon src/index.js",
+    "test": "jest"
   }
 }
