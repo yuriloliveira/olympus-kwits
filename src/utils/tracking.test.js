@@ -14,11 +14,10 @@ describe('Tracking utils', () => {
         </div>
         <span class="single-level">
           ${SINGLE_LEVEL_TEXT}
-        <span>
+        </span>
         <div class="multi-level">
           ${LEVEL_1_TEXT}
           <span>${LEVEL_2_TEXT}</span>
-          <span>2-Level</span>
         </div>
       </div>
     `;
@@ -26,8 +25,9 @@ describe('Tracking utils', () => {
     const $ = cheerio.load(html);
 
     it('should return the node text when it is a single level node', () => {
-      const singleLevelSpanText = trackingUtils.extractText($('.single-level')[0]);
-      expect(singleLevelSpanText).toBe(SINGLE_LEVEL_TEXT);
+      const node = $('.single-level');
+      const singleLevelText = trackingUtils.extractText(node[0]);;
+      expect(singleLevelText).toBe(SINGLE_LEVEL_TEXT);
     });
 
     it('should return the text from all children concatenated if it is a multi level node', () => {
