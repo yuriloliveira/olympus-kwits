@@ -4,6 +4,9 @@ const cheerio = require('cheerio');
 const request = require('request-promise');
 
 const trackingRouter = require('./tracking/router');
+
+const trackingUtils = require('./utils/tracking');
+
 const { PORT } = require('./config');
 
 const app = express();
@@ -43,20 +46,7 @@ const nodeToString = (node) => {
     const EVT_LIST_TBL_CLSNAME = 'listEvent';
     const EVT_TIME_CLSNAME = 'sroDtEvent';
     const EVT_DESC_CLSNAME = 'sroLbEvent';
-    // console.log(`table.${EVT_LIST_TBL_CLSNAME} tr ${EVT_TIME_CLSNAME}`);
     const eventTimeNodes = $(`table.${EVT_LIST_TBL_CLSNAME} tr td.${EVT_TIME_CLSNAME}`);
-    // const eventTimeTexts = eventTimeNodes.map(children => children.filter(child => child.type === 'text'));
-    // const test = eventTimeNodes[0].children().map(function(i, el) {
-    //   return el.tagName === 'label' ? el.firstChild.data : el.tagName;
-    // })
-    const test = eventTimeNodes.contents();
-    console.log(test);
-    const eventDescNodes = $(`table.${EVT_LIST_TBL_CLSNAME} tr td.${EVT_DESC_CLSNAME}`);
-    // console.log("TIME: ", eventTimeNodes);
-    // console.log("DESC: ", eventDescNodes);
-
-    const $2 = cheerio.load('<span>olá!</span>');
-    const span = $2('span');
-    console.log(span);
-    return res.status(200).send(correiosHTML);
+    const xml = parseString(eventTimeNodes[0].html());
+    const str = trackingUtils.extractText(eventTimeNodes[0]);
 })();

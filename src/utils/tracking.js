@@ -1,20 +1,24 @@
 const cheerio = require('cheerio');
 
-const extractText = (node) => {
-  if (!node) {
-    return '';
+const extractText = node => {
+  if (!node || typeof node !== "object") {
+    return "";
   }
 
-  const { data: nodeData } = node;
-  const nodeStr = parseText(nodeData);
-  
-  const { children } = node;
-  const { nextSibling } = node;
+  const { _, $, ..._node } = node;
+  const str = _ ? parseText(_) + " " : "";
+  const children = Object.values(_node);
+  const strs = children
+    .filter(child => typeof child === "string")
+    .join(" ")
+    .trim();
+  const childrenStr = Object.values(_node)
+    .filter(child => typeof child !== "string")
+    .map(extractText)
+    .join(" ")
+    .trim();
 
-  const childrenStr = children ? children.map(extractText).join(' ') : '';
-  const nextSiblingStr = nextSibling ? extractText(nextSibling) : '';
-
-  return `${nodeStr ? nodeStr + ' ' : ''}${childrenStr ? childrenStr + ' ' : ''}${nextSiblingStr}`.trim();
+  return `${str}${strs}${childrenStr}`;
 };
 
 const parseText = (text) => {

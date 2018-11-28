@@ -18,6 +18,7 @@ describe('Tracking utils', () => {
         <div class="multi-level">
           ${LEVEL_1_TEXT}
           <span>${LEVEL_2_TEXT}</span>
+          <span>2-Level</span>
         </div>
       </div>
     `;
