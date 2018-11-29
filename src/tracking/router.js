@@ -2,10 +2,11 @@ const express = require('express');
 const request = require('request-promise');
 const cheerio = require('cheerio');
 
+const extractText = require('../utils/tracking').extractText;
 module.exports = (function() {
   const router = express.Router();
 
-  router.get('/', async (req, res, next) => {
+  router.get('/:company/:trackingCode', async (req, res, next) => {
     const correiosHTML = await request('https://www2.correios.com.br/sistemas/rastreamento/resultado_semcontent.cfm', {
       method: 'POST',
       formData: {
@@ -18,21 +19,33 @@ module.exports = (function() {
     const EVT_LIST_TBL_CLSNAME = 'listEvent';
     const EVT_TIME_CLSNAME = 'sroDtEvent';
     const EVT_DESC_CLSNAME = 'sroLbEvent';
+    const eventTimeNodes = $(`table.${EVT_LIST_TBL_CLSNAME} tr td.${EVT_TIME_CLSNAME}`);
+    const eventDescNodes = $(`table.${EVT_LIST_TBL_CLSNAME} tr td.${EVT_DESC_CLSNAME}`);
+    // const eventsTimes = eventTimeNodes.map((i, el) => extractText(el));
 
-    const str = trackingUtils.extractText(eventTimeNodes);
-    // console.log(`table.${EVT_LIST_TBL_CLSNAME} tr ${EVT_TIME_CLSNAME}`);
-    // const eventTimeNodes = $(`table.${EVT_LIST_TBL_CLSNAME} tr td.${EVT_TIME_CLSNAME}`);(eventTimeNodes.children().map(function(i, el) {
-      //   return $(this).text;
-    // }));
-    // const event
-    // const eventTimeTexts = eventTimeNodes.map(children => children.filter(child => child.type === 'text'));
-    // console.log(eventTimeNodes.children().map(function(i, el) {
-    //   return $(this).text;
-    // }));
-    // const eventDescNodes = $(`table.${EVT_LIST_TBL_CLSNAME} tr td.${EVT_DESC_CLSNAME}`);
-    // console.log("TIME: ", eventTimeNodes);
-    // console.log("DESC: ", eventDescNodes);
-    return res.status(200).send(correiosHTML);
+    const eventsTimes = (() => {
+      const result = new Array(eventTimeNodes.length);
+      for (i = 0; i < eventTimeNodes.length; i++) {
+        result[i] = extractText(eventTimeNodes[i]);
+      }
+      return result;
+    })();
+
+    const eventsDescs = (() => {
+      const result = new Array(eventDescNodes.length);
+      for (i = 0; i < eventDescNodes.length; i++) {
+        result[i] = extractText(eventDescNodes[i]);
+      }
+      return result;
+    })();
+
+    // const eventsDescs = eventDescNodes.map((i, el) => extractText(el));
+    const events = eventsTimes.map((i, el) => ({
+      time: eventsTimes[i],
+      desc: eventsDescs[i]
+    }));
+    
+    return res.status(200).json(events);
   });
 
   return router;

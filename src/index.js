@@ -12,11 +12,11 @@ const { PORT } = require('./config');
 
 const app = express();
 
-app.use('/rastrear', trackingRouter);
-console.log('Route added /rastrear');
-
 app.listen(PORT);
 console.log(`Listening on port ${PORT}...`);
+
+app.use('/tracking', trackingRouter);
+console.log('Route added /tracking');
 
 (async function parseCorreiosTrackingPage() {
   const correiosHTML = await request('https://www2.correios.com.br/sistemas/rastreamento/resultado_semcontent.cfm', {
