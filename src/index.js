@@ -2,7 +2,6 @@
 const express = require('express');
 const cheerio = require('cheerio');
 const request = require('request-promise');
-const parseString = require('xml2js').parseString;
 
 const trackingRouter = require('./tracking/router');
 
