@@ -7,7 +7,7 @@ const LEVEL_1_TEXT = 'Level 1';
 const LEVEL_2_TEXT = 'Level 2';
 
 describe('Tracking utils', () => {
-  describe('nodeToString', () => {
+  describe('extractText', () => {
     const html = `
       <div class="root">
         <div class="level-1">
