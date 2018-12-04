@@ -21,11 +21,10 @@ module.exports = (function() {
     const EVT_DESC_CLSNAME = 'sroLbEvent';
     const eventTimeNodes = $(`table.${EVT_LIST_TBL_CLSNAME} tr td.${EVT_TIME_CLSNAME}`);
     const eventDescNodes = $(`table.${EVT_LIST_TBL_CLSNAME} tr td.${EVT_DESC_CLSNAME}`);
-    // const eventsTimes = eventTimeNodes.map((i, el) => extractText(el));
 
     const eventsTimes = (() => {
       const result = new Array(eventTimeNodes.length);
-      for (i = 0; i < eventTimeNodes.length; i++) {
+      for (let i = 0; i < eventTimeNodes.length; i++) {
         result[i] = extractText(eventTimeNodes[i]);
       }
       return result;
@@ -33,14 +32,13 @@ module.exports = (function() {
 
     const eventsDescs = (() => {
       const result = new Array(eventDescNodes.length);
-      for (i = 0; i < eventDescNodes.length; i++) {
+      for (let i = 0; i < eventDescNodes.length; i++) {
         result[i] = extractText(eventDescNodes[i]);
       }
       return result;
     })();
 
-    // const eventsDescs = eventDescNodes.map((i, el) => extractText(el));
-    const events = eventsTimes.map((i, el) => ({
+    const events = eventsTimes.map((el, i) => ({
       time: eventsTimes[i],
       desc: eventsDescs[i]
     }));
